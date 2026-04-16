@@ -2,15 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: datastore-backend
-  namespace: {{.Values.StudentStoreBackend.StudentDeploy.namespace}}
+  namespace: {{ .Values.StudentStoreBackend.StudentDeploy.namespace }}
   labels:
     type: datastore-backend
-
-    {{- include "common.labels" . | nindent 12}}
-    {{- with .Values.StudentStoreBackend.StudentDeploy}}
-    
 spec:
-  replicas: {{.replicaCount}}
+  replicas: {{ .Values.StudentStoreBackend.StudentDeploy.replicaCount }}
   selector:
     matchLabels:
       type: backend
@@ -22,7 +18,7 @@ spec:
     spec:
       containers:
         - name: datastore-backend
-          image: 8072388539/datastore:{{.image}}
+          image: 8072388539/datastore:{{ .Values.StudentStoreBackend.StudentDeploy.image }}
           ports:
             - containerPort: 8084
           env:
@@ -35,26 +31,29 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: datastore-be-cm
-                  key: mysqlUname
+                  key: name
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: datastore-be-secret
                   key: mysqlPassword
-          resources: {{-toYaml .resources | nindent 12}}
-          livenessProbe: {{-.toYaml .livenessProbe | nindent 12}}
-          readinessProbe: {{-.toYaml .readinessProbe | nindent 12}}
-          startupProbe: {{-.toYaml .startupProbe | nindent 12}}
-{{- end}}
+          resources:
+{{ toYaml .Values.StudentStoreBackend.StudentDeploy.resources | nindent 12 }}
+          livenessProbe:
+{{ toYaml .Values.StudentStoreBackend.StudentDeploy.livenessProbe | nindent 12 }}
+          readinessProbe:
+{{ toYaml .Values.StudentStoreBackend.StudentDeploy.readinessProbe | nindent 12 }}
+          startupProbe:
+{{ toYaml .Values.StudentStoreBackend.StudentDeploy.startupProbe | nindent 12 }}
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{.Values.StudentStoreBackend.StudentSvc.namespace}}
+  name: datastore-backend-svc
+  namespace: {{ .Values.StudentStoreBackend.StudentSvc.namespace }}
 spec:
   ports:
-    - port: {{.Values.StudentStoreBackend.StudentSvc.svcPort}}
+    - port: {{ .Values.StudentStoreBackend.StudentSvc.svcPort }}
       targetPort: 8084
   selector:
     type: backend
