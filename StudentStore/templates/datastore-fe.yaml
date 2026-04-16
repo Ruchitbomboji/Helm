@@ -1,50 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
-namespace: {{ .Values.StudenStoreFrontend.studentFeDeploy.namespace }}
-{{-with .Values.StudenStoreFrontend.studentFeDeploy }}
-
 metadata:
   name: datastore-frontend
+  namespace: {{ .Values.StudentStoreFrontend.studentFeDeploy.namespace }}
   labels:
     type: frontend
 spec:
+  replicas: {{ .Values.StudentStoreFrontend.studentFeDeploy.replicasCount }}
+  selector:
+    matchLabels:
+      type: frontend
   template:
     metadata:
-      name: datastore-frontend
       labels:
         type: frontend
     spec:
       containers:
         - name: mywebapp
-          image: 8072388539/datastore-frontend:{{ .imageTag }}
+          image: 8072388539/datastore-frontend:{{ .Values.StudentStoreFrontend.studentFeDeploy.imageTag }}
+          ports:
+            - containerPort: 8080
           env:
             - name: API_URL
               valueFrom:
                 configMapKeyRef:
                   name: datastore-fe-cm
                   key: backendEndpoint
-          resources: {{ toYaml .containerResources | nindent 12 }}
-
-          livenessProbe: {{ toYaml .livenessProbe | nindent 12 }}
-          readinessProbe: {{ toYaml .readinessProbe | nindent 12 }}
-          startupProbe: {{ toYaml .startupProbe | nindent 12 }}
-  replicas: {{ .replicasCount }}
-  selector:
-    matchLabels:
-      type: frontend
-
----
-
-apiVersion: v1
-kind: Service
-namespace: {{ .Values.studentSvc.namespace }}
-metadata:
-  name: datastore-frontend-svc
-spec:
-  ports:
-    - port: {{ .Values.studentSvc.port }}
-      targetPort: 8080
-  selector:
-    type: frontend
-
-{{- end }}
+          resources:
+{{ toYaml .Values.StudentStoreFrontend.studentFeDeploy.containerResources | nindent 12 }}
+          livenessProbe:
+{{ toYaml .Values.StudentStoreFrontend.studentFeDeploy.livenessProbe | nindent 12 }}
+          readinessProbe:
+{{ toYaml .Values.StudentStoreFrontend.studentFeDeploy.readinessProbe | nindent 12 }}
+          startupProbe:
+{{ toYaml .Values.StudentStoreFrontend.studentFeDeploy.startupProbe | nindent 12 }}
