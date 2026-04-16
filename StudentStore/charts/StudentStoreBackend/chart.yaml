@@ -1,4 +1,6 @@
-apiversion :v2
+apiVersion: v2
 name: StudentStoreBackend
-description: A Helm chart for StudentStoreBackend
-version: 0.0.1
+description: A Helm chart for Student Store Backend
+type: application
+version: 0.1.0
+appVersion: "1.0"
