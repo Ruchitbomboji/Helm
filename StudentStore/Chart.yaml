@@ -1,6 +1,11 @@
 apiVersion: v2
 name: StudentStoreFrontend
-description: A Helm chart for deploying Student Store Frontend
+description: A Helm chart for deploying the Student Store Frontend application
 type: application
 version: 0.1.0
 appVersion: "1.0"
+
+dependencies:
+  - name: StudentStoreBackend
+    version: 0.1.0
+    repository: "file://charts/StudentStoreBackend"
