@@ -49,4 +49,7 @@ StudentStoreBackend:
     name: admin
 
   StudentSecret:
+    mysqlPassword: "admin123"
+
+  StudentSecret:
     mysqlPassword: YWthc2gyMDAz

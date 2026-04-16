@@ -20,6 +20,7 @@ spec:
           image: 8072388539/datastore:{{ .Values.StudentStoreBackend.StudentDeploy.image }}
           ports:
             - containerPort: 8084
+            - containerPort: 9090
           env:
             - name: MYSQL_HOST
               valueFrom:
