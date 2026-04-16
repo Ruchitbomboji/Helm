@@ -12,7 +12,6 @@ spec:
       type: backend
   template:
     metadata:
-      name: datastore-backend
       labels:
         type: backend
     spec:
